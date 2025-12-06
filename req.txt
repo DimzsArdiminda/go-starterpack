@@ -1,0 +1,4 @@
+go mod init golang-backend
+go get github.com/gin-gonic/gin == express.js
+go get gorm.io/gorm == ORM library for Golang
+go get gorm.io/driver/mysql
