@@ -3,6 +3,7 @@ package main
 import (
 	config "golang-backend/Config"
 	routes "golang-backend/Routes"
+	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -10,16 +11,22 @@ import (
 )
 
 func main() {
-	// env
-	err := godotenv.Load()
-	if err != nil {
-		panic("Gagal Load ENV")
+	if err := godotenv.Load(); err != nil && !os.IsNotExist(err) {
+		log.Fatalf("load environment: %v", err)
 	}
-	
+
 	r := gin.Default()
 
-	config.ConnectionDB()
-	routes.RoutesInit(r)
+	if err := config.Connect(); err != nil {
+		log.Fatal(err)
+	}
+	routes.Register(r, config.DB)
 
-	r.Run(os.Getenv("APP_PORT"))
+	port := os.Getenv("APP_PORT")
+	if port == "" {
+		port = ":8080"
+	}
+	if err := r.Run(port); err != nil {
+		log.Fatal(err)
+	}
 }

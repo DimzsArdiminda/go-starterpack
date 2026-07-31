@@ -1,4 +1,4 @@
-package Config
+package config
 
 import (
 	"fmt"
@@ -10,7 +10,8 @@ import (
 
 var DB *gorm.DB
 
-func ConnectionDB(){
+// Connect initializes the shared database connection used by the application.
+func Connect() error {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Jakarta",
 		os.Getenv("DB_HOST"),
@@ -19,13 +20,12 @@ func ConnectionDB(){
 		os.Getenv("DB_NAME"),
 		os.Getenv("DB_PORT"),
 	)
-	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{TranslateError: true})
 
 	if err != nil {
-		panic("Gagal terkoneksi: " + err.Error())
+		return fmt.Errorf("connect to database: %w", err)
 	}
 
-
 	DB = database
-	println("Database terkoneksi")
+	return nil
 }

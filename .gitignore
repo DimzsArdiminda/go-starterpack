@@ -1,3 +1,17 @@
+# Environment and local secrets
 .env
-/temp/*
-go.*
+.env.*
+!.env.example
+
+# Go build and test output
+*.exe
+*.test
+*.out
+coverage.out
+/tmp/
+
+# Editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
