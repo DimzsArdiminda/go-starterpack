@@ -69,18 +69,36 @@ func Migrate() {
 }
 
 func applyMigration(name, source string) error {
+	statements := executableStatements(source)
+	if len(statements) == 0 {
+		return fmt.Errorf("migration contains no executable SQL")
+	}
+
 	return config.DB.Transaction(func(tx *gorm.DB) error {
-		for _, statement := range strings.Split(source, ";") {
-			statement = strings.TrimSpace(statement)
-			if statement == "" || strings.HasPrefix(statement, "--") {
-				continue
-			}
+		for _, statement := range statements {
 			if err := tx.Exec(statement).Error; err != nil {
 				return err
 			}
 		}
 		return tx.Create(&migrationRecord{Name: name, AppliedAt: time.Now()}).Error
 	})
+}
+
+func executableStatements(source string) []string {
+	lines := make([]string, 0)
+	for _, line := range strings.Split(source, "\n") {
+		if !strings.HasPrefix(strings.TrimSpace(line), "--") {
+			lines = append(lines, line)
+		}
+	}
+
+	statements := make([]string, 0)
+	for _, statement := range strings.Split(strings.Join(lines, "\n"), ";") {
+		if statement = strings.TrimSpace(statement); statement != "" {
+			statements = append(statements, statement)
+		}
+	}
+	return statements
 }
 
 func isNotFound(err error) bool { return errors.Is(err, gorm.ErrRecordNotFound) }
