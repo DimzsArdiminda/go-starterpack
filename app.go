@@ -3,6 +3,7 @@ package main
 import (
 	config "golang-backend/Config"
 	routes "golang-backend/Routes"
+	"golang-backend/cmd"
 	"log"
 	"os"
 
@@ -11,10 +12,16 @@ import (
 )
 
 func main() {
+
 	if err := godotenv.Load(); err != nil && !os.IsNotExist(err) {
 		log.Fatalf("load environment: %v", err)
 	}
 
+	if cmd.Run() {
+		return
+	}
+
+	gin.SetMode(config.GinMode())
 	r := gin.Default()
 
 	if err := config.Connect(); err != nil {

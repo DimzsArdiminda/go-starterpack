@@ -106,6 +106,27 @@ go run app.go
 
 Jika koneksi berhasil, Gin akan mendengarkan di `http://localhost:8080`. Biarkan terminal ini tetap berjalan selama API digunakan.
 
+## CLI generator dan database
+
+Semua command dijalankan dari root proyek dengan `go run .`:
+
+```bash
+go run . serve
+go run . make:model User
+go run . make:controller User
+go run . make:middleware Auth
+go run . make:request LoginRequest
+go run . make:migration create_users
+go run . make:crud User
+go run . migrate
+go run . db:seed
+go run . route:list
+```
+
+Generator tidak menimpa berkas yang sudah ada. `make:crud` membuat model dan controller sekaligus; route tetap didaftarkan secara eksplisit di `Routes/routes.go`.
+
+`make:migration` membuat berkas `.up.sql` di `Migrations/`. Isi SQL perubahan skema di berkas tersebut, lalu jalankan `migrate`. Setiap migration yang sukses dicatat pada tabel `schema_migrations` sehingga tidak dijalankan dua kali. Tambahkan seed spesifik aplikasi pada `Database/seed.go`.
+
 ### 6. Verifikasi API
 
 Buka terminal baru dan panggil health check:

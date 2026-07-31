@@ -1,0 +1,13 @@
+package models
+
+import "time"
+
+type {{ .Name }} struct {
+	ID        uint      `json:"id" gorm:"primaryKey"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+func ({{ .Name }}) TableName() string {
+	return "{{ .TableName }}"
+}
