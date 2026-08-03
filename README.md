@@ -40,7 +40,7 @@ Gunakan Go 1.23 atau yang lebih baru. PostgreSQL harus sedang berjalan dan perin
 
 ```bash
 cd backend-go
-go mod download
+go mod download / go mod tidy
 ```
 
 ### 3. Buat konfigurasi environment
@@ -101,7 +101,7 @@ Ketik `\q` untuk keluar dari `psql`. Bila memakai nama database, host, port, ata
 ### 5. Jalankan aplikasi
 
 ```bash
-go run app.go
+go run app.go / air
 ```
 
 Jika koneksi berhasil, Gin akan mendengarkan di `http://localhost:8080`. Biarkan terminal ini tetap berjalan selama API digunakan.
